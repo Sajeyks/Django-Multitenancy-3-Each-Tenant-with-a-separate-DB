@@ -1,6 +1,21 @@
 from django.db import models
+from django.core.validators import RegexValidator
 
-# Create your models here.
+subdomain_validator = RegexValidator(
+    r'^[a-zA-Z0-9-]+$',
+    'Enter a valid subdomain name.'
+)
+
+class Tenant(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    subdomain_prefix = models.CharField(max_length=100, unique=True, validators=[subdomain_validator])
+    
+    @property
+    def db_name(self):
+        return "database_"+str(self.id)
+    
+    def __str__(self):
+        return self.name
 
 class customer(models.Model):
     name = models.CharField(max_length=255)
