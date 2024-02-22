@@ -25,7 +25,9 @@ SECRET_KEY = 'django-insecure-mv#06&oegypj9^p7x27q+uymh685n9zj*$#*u9tdc=lga2$)2(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['{{EDUCATIVE_LIVE_VM_URL}}'.replace('https://','')]
+vm_url_without_https = '{{EDUCATIVE_LIVE_VM_URL}}'.replace('https://', '')
+
+ALLOWED_HOSTS = [vm_url_without_https, 'localhost', '.localhost']
 
 
 # Application definition
