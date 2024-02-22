@@ -56,7 +56,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'main.middleware.TenantMiddleware', # new
 ]
+DATABASE_ROUTERS = ['main.router.TenantRouter']  # new
 
 ROOT_URLCONF = 'demo.urls'
 
