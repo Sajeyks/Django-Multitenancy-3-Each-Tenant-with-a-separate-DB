@@ -11,6 +11,11 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import os
+import json
+from dotenv import load_dotenv, find_dotenv
+
+load_dotenv(find_dotenv())
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -80,13 +85,29 @@ WSGI_APPLICATION = 'demo.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'main_db',
-        'USER': 'postgres',
-        'PASSWORD': 'pstSQL254',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'NAME': os.environ['DB_NAME'],
+        'USER': os.environ['DB_USER'],
+        'PASSWORD': os.environ['DB_PASSWORD'],
+        'HOST': os.environ['DB_HOST'],
+        'PORT': os.environ['DB_PORT'],
+        'ATOMIC_REQUESTS': True,
+        'CONN_MAX_AGE': 0,
+        'CONN_HEALTH_CHECKS': True,
+        'TIME_ZONE' : 'UTC',
     }
 }
+
+TENANT_SETTINGS_FILE = os.path.join(BASE_DIR, 'tenant_databases.json')
+
+try:
+    if os.path.exists(TENANT_SETTINGS_FILE):
+        with open(TENANT_SETTINGS_FILE, 'r') as file:
+            TENANT_DATABASES = json.load(file)
+
+        # Update the DATABASES setting
+        DATABASES.update(TENANT_DATABASES)
+except Exception as e:
+    print(f"An error occurred while loading tenant settings: {str(e)}")
 
 
 # Password validation
